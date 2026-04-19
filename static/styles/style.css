@@ -72,29 +72,37 @@ button:hover {
     font-weight: bold;
 }
 
-
-.transaction-box {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 10px;
-    background: #f8f9fb;
+.dashboard-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 40px;
 }
 
 
-.dashboard-body {
-    display: block;
-    height: auto;
+.left-panel {
+    width: 40%;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 
-h1 {
-    color: #2d6cdf;
+.right-panel {
+    width: 50%;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    max-height: 80vh;
 }
+
 
 .transaction-item {
-    background: #f8f9fb;
+    background: #f4f7fb;
     padding: 10px;
     margin: 10px 0;
     border-radius: 8px;
-    text-align: left;
 }
