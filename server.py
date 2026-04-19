@@ -109,7 +109,7 @@ def send():
         conn = get_connection()
         cursor = conn.cursor()
 
-        # Get sender
+    
         cursor.execute(
             "SELECT id, balance FROM bank_accounts WHERE username = %s",
             (sender,)
@@ -125,7 +125,7 @@ def send():
         if sender_balance < amount:
             return "Not enough money"
 
-        # Get receiver
+     
         cursor.execute(
             "SELECT id FROM bank_accounts WHERE username = %s",
             (receiver,)
@@ -137,7 +137,7 @@ def send():
 
         receiver_id = receiver_data[0]
 
-        # Update balances
+       
         cursor.execute(
             "UPDATE bank_accounts SET balance = balance - %s WHERE id = %s",
             (amount, sender_id)
@@ -148,7 +148,7 @@ def send():
             (amount, receiver_id)
         )
 
-        # Transactions
+  
         cursor.execute(
             "INSERT INTO bank_transactions (id, balance, date) VALUES (%s, %s, NOW())",
             (sender_id, -amount)

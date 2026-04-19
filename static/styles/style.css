@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
 .hidden {
     display: none;
 }
 
 .login-page {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: "Varela Round", sans-serif;
     background: #f4f7fb;
     display: flex;
     justify-content: center;
@@ -64,6 +66,7 @@ button:hover {
 
 
 .balance-box {
+    font-family: "Varela Round", sans-serif;
     background: #eaf1ff;
     padding: 15px;
     margin: 15px 0;
@@ -73,6 +76,7 @@ button:hover {
 }
 
 .dashboard-container {
+    font-family: "Varela Round", sans-serif;
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -81,6 +85,7 @@ button:hover {
 
 
 .left-panel {
+    font-family: "Varela Round", sans-serif;
     width: 40%;
     background: white;
     padding: 20px;
@@ -90,6 +95,7 @@ button:hover {
 
 
 .right-panel {
+      font-family: "Varela Round", sans-serif;
     width: 50%;
     background: white;
     padding: 20px;
@@ -101,8 +107,15 @@ button:hover {
 
 
 .transaction-item {
+    font-family: "Varela Round", sans-serif;
     background: #f4f7fb;
     padding: 10px;
     margin: 10px 0;
     border-radius: 8px;
+}
+
+.varela-round-regular {
+  font-family: "Varela Round", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
