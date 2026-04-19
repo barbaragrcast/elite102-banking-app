@@ -27,19 +27,21 @@
 </form>
 
 
-    <div id="signupForm" class="hidden">
-        <h2>Create Account</h2>
+   <form id="signupForm" class="hidden" action="/signup" method="POST">
+    <h2>Create Account</h2>
 
-        <input type="text" placeholder="Username">
-        <input type="password" placeholder="Password">
-        <input type="number" placeholder="Starting Balance">
+    <input type="text" name="username" placeholder="Username" autocomplete="username">
 
-        <button>Sign Up</button>
+    <input type="password" name="password" placeholder="Password" autocomplete="new-password">
 
-        <div class="toggle">
-            Already have an account? <span onclick="showLogin()">Login</span>
-        </div>
+    <input type="number" name="balance" placeholder="Starting Balance">
+
+    <button type="submit">Sign Up</button>
+
+    <div class="toggle">
+        Already have an account? <span onclick="showLogin()">Login</span>
     </div>
+</form>
 
 </div>
 
