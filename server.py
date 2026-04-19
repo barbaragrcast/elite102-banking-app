@@ -150,12 +150,12 @@ def send():
 
         # Transactions
         cursor.execute(
-            "INSERT INTO bank_transactions (bank_account_id, balance, date) VALUES (%s, %s, NOW())",
+            "INSERT INTO bank_transactions (id, balance, date) VALUES (%s, %s, NOW())",
             (sender_id, -amount)
         )
 
         cursor.execute(
-            "INSERT INTO bank_transactions (bank_account_id, balance, date) VALUES (%s, %s, NOW())",
+            "INSERT INTO bank_transactions (id, balance, date) VALUES (%s, %s, NOW())",
             (receiver_id, amount)
         )
 
