@@ -33,6 +33,22 @@
             <button type="submit">Send Money</button>
         </form>
 
+         <h3>Transaction History</h3>
+
+    {% if transactions %}
+        {% for t in transactions %}
+            <div class="transaction-item">
+                <p>
+                    💸 {{ t[0] }} <br>
+                    📅 {{ t[1] }}
+                </p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No transactions yet</p>
+    {% endif %}
+
+
     </div>
 
 </div>

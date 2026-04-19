@@ -4,10 +4,11 @@ from waitress import serve
 
 app = Flask(__name__)
 
-# Home page
+
 @app.route('/')
 def index():
     return render_template("index.html")
+
 
 
 @app.route('/signup', methods=['POST'])
@@ -25,17 +26,11 @@ def signup():
     )
 
     conn.commit()
-
     cursor.close()
     conn.close()
 
-    return f"""
-    <h2>Account Created Successfully</h2>
-    <p><b>Username:</b> {username}</p>
-    <p><b>Password:</b> {password}</p>
-    <p><b>Balance:</b> {balance}</p>
-    <a href="/">Go back</a>
-    """
+    return redirect(url_for('dashboard', username=username))
+
 
 
 @app.route('/login', methods=['POST'])
@@ -60,23 +55,45 @@ def login():
         return redirect(url_for('dashboard', username=username))
     else:
         return "Invalid login"
-    
+
+
+
 @app.route('/dashboard/<username>')
 def dashboard(username):
     conn = get_connection()
     cursor = conn.cursor()
 
+  
     cursor.execute(
-        "SELECT balance FROM bank_accounts WHERE username = %s",
+        "SELECT id, balance FROM bank_accounts WHERE username = %s",
         (username,)
     )
+    user = cursor.fetchone()
 
-    balance = cursor.fetchone()[0]
+    if not user:
+        return "User not found"
+
+    user_id = user[0]
+    balance = user[1]
+
+  
+    cursor.execute(
+        "SELECT balance, date FROM bank_transactions WHERE id = %s ORDER BY date DESC",
+        (user_id,)
+    )
+    transactions = cursor.fetchall()
 
     cursor.close()
     conn.close()
 
-    return render_template("dashboard.html", username=username, balance=balance)
+    return render_template(
+        "dashboard.html",
+        username=username,
+        balance=balance,
+        transactions=transactions
+    )
+
+
 
 @app.route('/send', methods=['POST'])
 def send():
@@ -87,19 +104,24 @@ def send():
     conn = get_connection()
     cursor = conn.cursor()
 
- 
     cursor.execute(
-        "SELECT balance FROM bank_accounts WHERE username = %s",
+        "SELECT id, balance FROM bank_accounts WHERE username = %s",
         (sender,)
     )
-    sender_balance = cursor.fetchone()[0]
+    sender_data = cursor.fetchone()
+
+    if not sender_data:
+        return "Sender not found"
+
+    sender_id = sender_data[0]
+    sender_balance = sender_data[1]
 
     if sender_balance < amount:
         return "Not enough money"
 
 
     cursor.execute(
-        "SELECT balance FROM bank_accounts WHERE username = %s",
+        "SELECT id FROM bank_accounts WHERE username = %s",
         (receiver,)
     )
     receiver_data = cursor.fetchone()
@@ -107,23 +129,38 @@ def send():
     if not receiver_data:
         return "Receiver does not exist"
 
+    receiver_id = receiver_data[0]
 
+  
     cursor.execute(
-        "UPDATE bank_accounts SET balance = balance - %s WHERE username = %s",
-        (amount, sender)
+        "UPDATE bank_accounts SET balance = balance - %s WHERE id = %s",
+        (amount, sender_id)
     )
 
     cursor.execute(
-        "UPDATE bank_accounts SET balance = balance + %s WHERE username = %s",
-        (amount, receiver)
+        "UPDATE bank_accounts SET balance = balance + %s WHERE id = %s",
+        (amount, receiver_id)
+    )
+
+ 
+    cursor.execute(
+        "INSERT INTO bank_transactions (id, balance, date) VALUES (%s, %s, NOW())",
+        (sender_id, -amount)
+    )
+
+   
+    cursor.execute(
+        "INSERT INTO bank_transactions (id, balance, date) VALUES (%s, %s, NOW())",
+        (receiver_id, amount)
     )
 
     conn.commit()
-
     cursor.close()
     conn.close()
 
     return redirect(url_for('dashboard', username=sender))
+
+
 
 if __name__ == "__main__":
     serve(app, host="0.0.0.0", port=8000)
