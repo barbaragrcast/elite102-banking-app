@@ -25,10 +25,17 @@ def signup():
     )
 
     conn.commit()
+
     cursor.close()
     conn.close()
 
-    return "Account created"
+    return f"""
+    <h2>Account Created Successfully</h2>
+    <p><b>Username:</b> {username}</p>
+    <p><b>Password:</b> {password}</p>
+    <p><b>Balance:</b> {balance}</p>
+    <a href="/">Go back</a>
+    """
 
 
 @app.route('/login', methods=['POST'])
@@ -54,6 +61,6 @@ def login():
     else:
         return "Invalid username or password"
     
-    
+
 if __name__ == "__main__":
     serve(app, host="0.0.0.0", port=8000)
