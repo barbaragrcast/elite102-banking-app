@@ -20,7 +20,7 @@ def signup():
     cursor = conn.cursor()
 
     cursor.execute(
-        "INSERT INTO accounts (username, password, balance) VALUES (%s, %s, %s)",
+        "INSERT INTO bank_accounts (username, password, balance) VALUES (%s, %s, %s)",
         (username, password, balance)
     )
 
@@ -40,7 +40,7 @@ def login():
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT * FROM accounts WHERE username = %s AND password = %s",
+        "SELECT * FROM bank_accounts WHERE username = %s AND password = %s",
         (username, password)
     )
 
