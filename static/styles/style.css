@@ -2,7 +2,7 @@
     display: none;
 }
 
-body {
+.login-page {
     margin: 0;
     font-family: Arial, sans-serif;
     background: #f4f7fb;
@@ -59,4 +59,34 @@ button:hover {
 .toggle span {
     color: #2d6cdf;
     cursor: pointer;
+}
+
+
+
+.balance-box {
+    background: #eaf1ff;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+.transaction-box {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    background: #f8f9fb;
+}
+
+
+.dashboard-body {
+    display: block;
+    height: auto;
+}
+
+
+h1 {
+    color: #2d6cdf;
 }

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link href="{{ url_for('static', filename='styles/style.css') }}" rel="stylesheet"/>
+</head>
+
+<body class="dashboard-page">
+
+<div class="container">
+
+    <h1>WELCOME {{ username }}</h1>
+
+  
+    <div class="balance-box">
+        Your Balance: ${{ balance }}
+    </div>
+
+    <hr>
+
+    
+    <div class="transaction-box">
+
+        <h3>Send Money</h3>
+
+        <form action="/send" method="POST">
+            <input type="hidden" name="sender" value="{{ username }}">
+
+            <input type="text" name="receiver" placeholder="Receiver username" required>
+
+            <input type="number" name="amount" placeholder="Amount" required>
+
+            <button type="submit">Send Money</button>
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>
