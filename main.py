@@ -1,10 +1,10 @@
-import mysql.connector
-from .env import conn
+from db import get_connection
 
 print("Starting program...")
 
 
 
+conn = get_connection()
 cursor = conn.cursor()
 
 print("Connected!")
@@ -14,7 +14,6 @@ cursor.execute("SELECT * FROM bank_accounts")  # <-- change if your table name i
 
 rows = cursor.fetchall()
 
-print("Rows:", rows)
 
 for row in rows:
     print(row)
