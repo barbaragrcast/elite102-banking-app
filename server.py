@@ -28,7 +28,7 @@ def signup():
     cursor.close()
     conn.close()
 
-    return redirect('/')
+    return "Account created"
 
 
 @app.route('/login', methods=['POST'])
@@ -53,6 +53,7 @@ def login():
         return f"Welcome {username}"
     else:
         return "Invalid username or password"
+    
     
 if __name__ == "__main__":
     serve(app, host="0.0.0.0", port=8000)
