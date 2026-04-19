@@ -1,14 +1,9 @@
 import mysql.connector
+from .env import conn
 
 print("Starting program...")
 
-# Connect to MySQL
-conn = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="Chispita2013*",   # your password
-    database="banking_app"      # MUST match your DB
-)
+
 
 cursor = conn.cursor()
 
