@@ -94,73 +94,80 @@ def dashboard(username):
     )
 
 
-
 @app.route('/send', methods=['POST'])
 def send():
-    sender = request.form.get("sender")
-    receiver = request.form.get("receiver")
-    amount = float(request.form.get("amount"))
+    try:
+        sender = request.form.get("sender")
+        receiver = request.form.get("receiver")
+        amount = request.form.get("amount")
 
-    conn = get_connection()
-    cursor = conn.cursor()
+        if not sender or not receiver or not amount:
+            return "Missing form data"
 
-    cursor.execute(
-        "SELECT id, balance FROM bank_accounts WHERE username = %s",
-        (sender,)
-    )
-    sender_data = cursor.fetchone()
+        amount = float(amount)
 
-    if not sender_data:
-        return "Sender not found"
+        conn = get_connection()
+        cursor = conn.cursor()
 
-    sender_id = sender_data[0]
-    sender_balance = sender_data[1]
+        # Get sender
+        cursor.execute(
+            "SELECT id, balance FROM bank_accounts WHERE username = %s",
+            (sender,)
+        )
+        sender_data = cursor.fetchone()
 
-    if sender_balance < amount:
-        return "Not enough money"
+        if not sender_data:
+            return "Sender not found"
 
+        sender_id = sender_data[0]
+        sender_balance = sender_data[1]
 
-    cursor.execute(
-        "SELECT id FROM bank_accounts WHERE username = %s",
-        (receiver,)
-    )
-    receiver_data = cursor.fetchone()
+        if sender_balance < amount:
+            return "Not enough money"
 
-    if not receiver_data:
-        return "Receiver does not exist"
+        # Get receiver
+        cursor.execute(
+            "SELECT id FROM bank_accounts WHERE username = %s",
+            (receiver,)
+        )
+        receiver_data = cursor.fetchone()
 
-    receiver_id = receiver_data[0]
+        if not receiver_data:
+            return "Receiver not found"
 
-  
-    cursor.execute(
-        "UPDATE bank_accounts SET balance = balance - %s WHERE id = %s",
-        (amount, sender_id)
-    )
+        receiver_id = receiver_data[0]
 
-    cursor.execute(
-        "UPDATE bank_accounts SET balance = balance + %s WHERE id = %s",
-        (amount, receiver_id)
-    )
+        # Update balances
+        cursor.execute(
+            "UPDATE bank_accounts SET balance = balance - %s WHERE id = %s",
+            (amount, sender_id)
+        )
 
- 
-    cursor.execute(
-        "INSERT INTO bank_transactions (id, balance, date) VALUES (%s, %s, NOW())",
-        (sender_id, -amount)
-    )
+        cursor.execute(
+            "UPDATE bank_accounts SET balance = balance + %s WHERE id = %s",
+            (amount, receiver_id)
+        )
 
-   
-    cursor.execute(
-        "INSERT INTO bank_transactions (id, balance, date) VALUES (%s, %s, NOW())",
-        (receiver_id, amount)
-    )
+        # Transactions
+        cursor.execute(
+            "INSERT INTO bank_transactions (bank_account_id, balance, date) VALUES (%s, %s, NOW())",
+            (sender_id, -amount)
+        )
 
-    conn.commit()
-    cursor.close()
-    conn.close()
+        cursor.execute(
+            "INSERT INTO bank_transactions (bank_account_id, balance, date) VALUES (%s, %s, NOW())",
+            (receiver_id, amount)
+        )
 
-    return redirect(url_for('dashboard', username=sender))
+        conn.commit()
+        cursor.close()
+        conn.close()
 
+        return redirect(url_for('dashboard', username=sender))
 
+    except Exception as e:
+        print("ERROR:", e)
+        return "Server error (check terminal)"
 
 if __name__ == "__main__":
     serve(app, host="0.0.0.0", port=8000)
