@@ -19,8 +19,9 @@ CREATE TABLE bank_accounts (
 
 CREATE TABLE bank_transactions (
     transaction_id INT AUTO_INCREMENT PRIMARY KEY,
-    id INT NOT NULL,  -- foreign key to bank_accounts.id
+    id INT NOT NULL,  
     balance DECIMAL(10,2) NOT NULL,
     date DATETIME NOT NULL,
-
+    FOREIGN KEY (id) REFERENCES bank_accounts(id)
 );
+
